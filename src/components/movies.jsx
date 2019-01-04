@@ -11,6 +11,20 @@ class Movies extends Component {
     };
   }
 
+  handleLike(movie) {
+    const movies = this.state.movies.map(m => {
+      if (m._id === movie._id) {
+        m.liked = !movie.liked;
+        return m;
+      }
+      return m;
+    });
+
+    this.setState({
+      movies
+    });
+  }
+
   handleDelete(movie) {
     console.log("Deleting: ", movie._id);
     deleteMovie(movie._id);
@@ -32,6 +46,7 @@ class Movies extends Component {
           <DataTable
             movies={this.state.movies}
             onClick={movie => this.handleDelete(movie)}
+            onLike={movie => this.handleLike(movie)}
           />
         )}
       </div>

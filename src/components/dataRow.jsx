@@ -10,7 +10,10 @@ class DataRow extends Component {
         <td>{this.props.movie.numberInStock}</td>
         <td>{this.props.movie.dailyRentalRate}</td>
         <td>
-          <LikeButton />
+          <LikeButton
+            liked={this.props.movie.liked}
+            onLike={() => this.props.onLike(this.props.movie)}
+          />
         </td>
         <td>
           <button

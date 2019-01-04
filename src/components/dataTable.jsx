@@ -28,6 +28,7 @@ class DataTable extends Component {
                   movie={movie}
                   key={movie._id}
                   onClick={() => this.props.onClick(movie)}
+                  onLike={() => this.props.onLike(movie)}
                 />
               ))}
             </tbody>

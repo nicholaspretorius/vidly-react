@@ -1,27 +1,14 @@
 import React, { Component } from "react";
 
 class LikeButton extends Component {
-  state = {
-    like: false
-  };
-
   likeUnlikeStyle() {
-    return !this.state.like ? "fa fa-heart-o" : "fa fa-heart";
-  }
-
-  likeUnlike() {
-    let like = this.state.like;
-    like = !like;
-    this.setState({ like });
+    return !this.props.liked ? "fa fa-heart-o" : "fa fa-heart";
   }
 
   render() {
     return (
       <span>
-        <i
-          className={this.likeUnlikeStyle()}
-          onClick={() => this.likeUnlike()}
-        />
+        <i className={this.likeUnlikeStyle()} onClick={this.props.onLike} />
       </span>
     );
   }
