@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getMovies } from "./../services/fakeMovieService";
+import { getMovies, deleteMovie } from "./../services/fakeMovieService";
 import DataTable from "./dataTable";
 
 class Movies extends Component {
@@ -11,14 +11,28 @@ class Movies extends Component {
     };
   }
 
-  handleDelete() {}
+  handleDelete(movie) {
+    console.log("Deleting: ", movie._id);
+    deleteMovie(movie._id);
+    const movies = getMovies();
+    this.setState({
+      movies
+    });
+  }
 
   render() {
     return (
       <div>
-        <h3>Movie Databases</h3>
-        <p>There are currently x movies in the database.</p>
-        <DataTable movies={this.state.movies} />
+        <h3>Vidly React</h3>
+        {this.state.movies.length === 0 && (
+          <span>There are no currently no movies.</span>
+        )}
+        {this.state.movies.length > 0 && (
+          <DataTable
+            movies={this.state.movies}
+            onClick={movie => this.handleDelete(movie)}
+          />
+        )}
       </div>
     );
   }
