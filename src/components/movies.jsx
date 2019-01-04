@@ -15,6 +15,7 @@ class Movies extends Component {
     console.log("Deleting: ", movie._id);
     deleteMovie(movie._id);
     const movies = getMovies();
+    // const movies = this.state.movies.filter(m => m._id !== movie._id);
     this.setState({
       movies
     });

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import LikeButton from "./like";
 
 class DataRow extends Component {
   render() {
@@ -8,6 +9,9 @@ class DataRow extends Component {
         <td>{this.props.movie.genre.name}</td>
         <td>{this.props.movie.numberInStock}</td>
         <td>{this.props.movie.dailyRentalRate}</td>
+        <td>
+          <LikeButton />
+        </td>
         <td>
           <button
             className="btn btn-danger btn-sm"
