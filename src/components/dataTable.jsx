@@ -1,8 +1,18 @@
 import React, { Component } from "react";
 import DataRow from "./dataRow";
+import Pagination from "./common/pagination";
 
 class DataTable extends Component {
-  state = {};
+  state = {
+    pageSize: 2,
+    currentPage: 1
+  };
+
+  handlePagination = page => {
+    this.setState({
+      currentPage: page
+    });
+  };
 
   render() {
     return (
@@ -33,6 +43,12 @@ class DataTable extends Component {
               ))}
             </tbody>
           </table>
+          <Pagination
+            count={this.props.movies.length}
+            pageSize={this.state.pageSize}
+            current={this.state.currentPage}
+            onPaginate={this.handlePagination}
+          />
         </div>
       </React.Fragment>
     );
