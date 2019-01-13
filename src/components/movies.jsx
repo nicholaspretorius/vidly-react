@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { getMovies, deleteMovie } from "./../services/fakeMovieService";
+import { getGenres } from "./../services/fakeGenreService";
 import DataTable from "./dataTable";
 import paginate from "./../utils/paginate";
+import GenreList from "./common/listGroup";
 
 class Movies extends Component {
   constructor(props) {
@@ -9,9 +11,24 @@ class Movies extends Component {
 
     this.state = {
       movies: getMovies(),
+      genres: this.setupGenres(),
+      currentGenre: "All",
       pageSize: 2,
       currentPage: 1
     };
+  }
+
+  setupGenres() {
+    const genres = getGenres();
+    const all = { _id: "0", name: "All" };
+    return [all, ...genres];
+  }
+
+  handleGenreSelection(genre) {
+    console.log("Genre selected: ", genre);
+    this.setState({
+      currentGenre: genre.name
+    });
   }
 
   handleLike(movie) {
@@ -64,15 +81,26 @@ class Movies extends Component {
           </p>
         }
         {this.state.movies.length > 0 && (
-          <DataTable
-            pageSize={this.state.pageSize}
-            currentPage={this.state.currentPage}
-            allMovies={this.state.movies}
-            movies={movies}
-            onClick={movie => this.handleDelete(movie)}
-            onLike={movie => this.handleLike(movie)}
-            onPaginate={page => this.handlePagination(page)}
-          />
+          <div className="row">
+            <div className="col-3">
+              <GenreList
+                genres={this.state.genres}
+                currentGenre={this.state.currentGenre}
+                onClick={genre => this.handleGenreSelection(genre)}
+              />
+            </div>
+            <div className="col">
+              <DataTable
+                pageSize={this.state.pageSize}
+                currentPage={this.state.currentPage}
+                allMovies={this.state.movies}
+                movies={movies}
+                onClick={movie => this.handleDelete(movie)}
+                onLike={movie => this.handleLike(movie)}
+                onPaginate={page => this.handlePagination(page)}
+              />
+            </div>
+          </div>
         )}
       </div>
     );
