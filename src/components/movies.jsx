@@ -10,7 +10,7 @@ class Movies extends Component {
     this.state = {
       movies: getMovies(),
       pageMovies: getMovies(),
-      pageSize: 5,
+      pageSize: 2,
       currentPage: 1
     };
   }

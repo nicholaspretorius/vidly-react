@@ -2,6 +2,26 @@ import React, { Component } from "react";
 import DataRow from "./dataRow";
 
 class DataTable extends Component {
+  calculatePages() {
+    const pageCount = Math.ceil(
+      this.props.allMovies.length / this.props.pageSize
+    );
+    console.log("Page Count: ", this.props.currentPage, pageCount);
+
+    const start =
+      this.props.currentPage === 1
+        ? this.props.currentPage
+        : (this.props.currentPage - 1) * this.props.pageSize + 1;
+    const end =
+      this.props.currentPage === pageCount
+        ? this.props.allMovies.length
+        : this.props.currentPage * this.props.pageSize;
+
+    return this.props.movies.length === 1
+      ? this.props.allMovies.length
+      : " " + start + " - " + end;
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -9,15 +29,7 @@ class DataTable extends Component {
           There are currently {this.props.allMovies.length} movies in the
           database.
         </p>
-        <p>
-          Displaying movies:
-          {this.props.currentPage === 1
-            ? " " + this.props.currentPage + " - " + this.props.pageSize
-            : " " +
-              (this.props.currentPage - 1) * this.props.pageSize +
-              " - " +
-              this.props.currentPage * this.props.pageSize}
-        </p>
+        <p>Displaying movies: {this.calculatePages()}</p>
         <div className="table-responsive">
           <table className="table">
             <thead>
