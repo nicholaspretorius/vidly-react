@@ -5,6 +5,7 @@ class DataRow extends Component {
   render() {
     return (
       <tr>
+        <td>{this.props.index + 1}.</td>
         <th scope="row">{this.props.movie.title}</th>
         <td>{this.props.movie.genre.name}</td>
         <td>{this.props.movie.numberInStock}</td>

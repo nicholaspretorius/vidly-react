@@ -1,13 +1,17 @@
 import React, { Component } from "react";
 import { getMovies, deleteMovie } from "./../services/fakeMovieService";
 import DataTable from "./dataTable";
+import Pagination from "./common/pagination";
 
 class Movies extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      movies: getMovies()
+      movies: getMovies(),
+      pageMovies: getMovies(),
+      pageSize: 3,
+      currentPage: 1
     };
   }
 
@@ -35,6 +39,22 @@ class Movies extends Component {
     });
   }
 
+  handlePagination = page => {
+    const index = page === 1 ? 0 : page - 1;
+    // const movies = this.state.movies;
+    const movies = this.state.movies.slice(
+      index * this.state.pageSize,
+      (index + 1) * this.state.pageSize
+    );
+
+    console.log("Page: ", page, ", Index: ", index, ", Movies: ", movies);
+
+    this.setState({
+      currentPage: page,
+      pageMovies: movies
+    });
+  };
+
   render() {
     return (
       <div>
@@ -44,11 +64,18 @@ class Movies extends Component {
         )}
         {this.state.movies.length > 0 && (
           <DataTable
-            movies={this.state.movies}
+            movies={this.state.pageMovies}
+            allMovies={this.state.movies}
             onClick={movie => this.handleDelete(movie)}
             onLike={movie => this.handleLike(movie)}
           />
         )}
+        <Pagination
+          count={this.state.movies.length}
+          pageSize={this.state.pageSize}
+          current={this.state.currentPage}
+          onPaginate={page => this.handlePagination(page)}
+        />
       </div>
     );
   }
