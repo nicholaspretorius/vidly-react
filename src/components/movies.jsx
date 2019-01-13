@@ -12,8 +12,8 @@ class Movies extends Component {
     this.state = {
       movies: getMovies(),
       genres: this.setupGenres(),
-      currentGenre: "All",
-      pageSize: 2,
+      currentGenre: this.setupGenres()[0],
+      pageSize: 3,
       currentPage: 1
     };
   }
@@ -25,9 +25,26 @@ class Movies extends Component {
   }
 
   handleGenreSelection(genre) {
-    console.log("Genre selected: ", genre);
+    console.log(
+      "Current genre: ",
+      this.state.currentGenre,
+      " Genre selected: ",
+      genre
+    );
+
+    const movies = getMovies().filter(movie => {
+      if (this.state.currentGenre.name === "All") {
+        console.log("All", movie);
+        return movie;
+      } else {
+        console.log(genre.name, " : ", movie);
+        return genre.name === movie.genre.name;
+      }
+    });
+
     this.setState({
-      currentGenre: genre.name
+      movies,
+      currentGenre: genre
     });
   }
 

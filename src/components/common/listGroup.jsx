@@ -9,7 +9,7 @@ class GenreList extends Component {
           return (
             <a
               className={
-                genre.name === this.props.currentGenre
+                genre.name === this.props.currentGenre.name
                   ? "list-group-item list-group-item-action active"
                   : "list-group-item list-group-item-action"
               }
