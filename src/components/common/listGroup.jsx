@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class GenreList extends Component {
   render() {
-    console.log("Genres: ", this.props.genres);
+    console.log("Genres: ", this.props.genres, this.props.currentGenre.name);
     return (
       <div className="list-group">
         {this.props.genres.map(genre => {

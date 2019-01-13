@@ -33,7 +33,7 @@ class Movies extends Component {
     );
 
     const movies = getMovies().filter(movie => {
-      if (this.state.currentGenre.name === "All") {
+      if (genre.name === "All") {
         console.log("All", movie);
         return movie;
       } else {
