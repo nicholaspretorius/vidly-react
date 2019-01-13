@@ -3,23 +3,9 @@ import DataRow from "./dataRow";
 import Pagination from "./common/pagination";
 
 class DataTable extends Component {
-  state = {
-    pageSize: 2,
-    currentPage: 1
-  };
-
-  handlePagination = page => {
-    this.setState({
-      currentPage: page
-    });
-  };
-
   render() {
     return (
       <React.Fragment>
-        <p>
-          There are currently {this.props.movies.length} movies in the database.
-        </p>
         <div className="table-responsive">
           <table className="table">
             <thead>
@@ -33,8 +19,9 @@ class DataTable extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.props.movies.map(movie => (
+              {this.props.movies.map((movie, index) => (
                 <DataRow
+                  index={index}
                   movie={movie}
                   key={movie._id}
                   onClick={() => this.props.onClick(movie)}
@@ -44,10 +31,10 @@ class DataTable extends Component {
             </tbody>
           </table>
           <Pagination
-            count={this.props.movies.length}
-            pageSize={this.state.pageSize}
-            current={this.state.currentPage}
-            onPaginate={this.handlePagination}
+            count={this.props.allMovies.length}
+            pageSize={this.props.pageSize}
+            current={this.props.currentPage}
+            onPaginate={page => this.props.onPaginate(page)}
           />
         </div>
       </React.Fragment>
