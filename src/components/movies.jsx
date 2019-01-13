@@ -10,7 +10,7 @@ class Movies extends Component {
     this.state = {
       movies: getMovies(),
       pageMovies: getMovies(),
-      pageSize: 3,
+      pageSize: 5,
       currentPage: 1
     };
   }
@@ -66,6 +66,8 @@ class Movies extends Component {
           <DataTable
             movies={this.state.pageMovies}
             allMovies={this.state.movies}
+            currentPage={this.state.currentPage}
+            pageSize={this.state.pageSize}
             onClick={movie => this.handleDelete(movie)}
             onLike={movie => this.handleLike(movie)}
           />

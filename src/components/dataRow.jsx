@@ -5,7 +5,13 @@ class DataRow extends Component {
   render() {
     return (
       <tr>
-        <td>{this.props.index + 1}.</td>
+        <td>
+          {this.props.currentPage === 1
+            ? this.props.index + 1 + "."
+            : this.props.pageSize * (this.props.currentPage - 1) +
+              (this.props.index + 1) +
+              "."}
+        </td>
         <th scope="row">{this.props.movie.title}</th>
         <td>{this.props.movie.genre.name}</td>
         <td>{this.props.movie.numberInStock}</td>

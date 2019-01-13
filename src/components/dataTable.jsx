@@ -9,6 +9,15 @@ class DataTable extends Component {
           There are currently {this.props.allMovies.length} movies in the
           database.
         </p>
+        <p>
+          Displaying movies:
+          {this.props.currentPage === 1
+            ? " " + this.props.currentPage + " - " + this.props.pageSize
+            : " " +
+              (this.props.currentPage - 1) * this.props.pageSize +
+              " - " +
+              this.props.currentPage * this.props.pageSize}
+        </p>
         <div className="table-responsive">
           <table className="table">
             <thead>
@@ -28,6 +37,8 @@ class DataTable extends Component {
                   index={index}
                   movie={movie}
                   key={movie._id}
+                  currentPage={this.props.currentPage}
+                  pageSize={this.props.pageSize}
                   onClick={() => this.props.onClick(movie)}
                   onLike={() => this.props.onLike(movie)}
                 />
