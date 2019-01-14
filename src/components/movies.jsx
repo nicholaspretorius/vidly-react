@@ -10,12 +10,19 @@ class Movies extends Component {
     super(props);
 
     this.state = {
-      movies: getMovies(),
-      genres: this.setupGenres(),
+      movies: [],
+      genres: [],
       currentGenre: this.setupGenres()[0],
       pageSize: 3,
       currentPage: 1
     };
+  }
+
+  componentDidMount() {
+    this.setState({
+      movies: getMovies(),
+      genres: this.setupGenres()
+    });
   }
 
   setupGenres() {
@@ -24,20 +31,11 @@ class Movies extends Component {
     return [all, ...genres];
   }
 
-  handleGenreSelection(genre) {
-    console.log(
-      "Current genre: ",
-      this.state.currentGenre,
-      " Genre selected: ",
-      genre
-    );
-
+  handleGenreSelection = genre => {
     const movies = getMovies().filter(movie => {
       if (genre.name === "All") {
-        console.log("All", movie);
         return movie;
       } else {
-        console.log(genre.name, " : ", movie);
         return genre.name === movie.genre.name;
       }
     });
@@ -46,7 +44,7 @@ class Movies extends Component {
       movies,
       currentGenre: genre
     });
-  }
+  };
 
   handleLike(movie) {
     const movies = this.state.movies.map(m => {
@@ -63,7 +61,6 @@ class Movies extends Component {
   }
 
   handleDelete(movie) {
-    console.log("Deleting: ", movie._id);
     deleteMovie(movie._id);
     const movies = getMovies();
     // const movies = this.state.movies.filter(m => m._id !== movie._id);
@@ -73,7 +70,6 @@ class Movies extends Component {
   }
 
   handlePagination = page => {
-    console.log("Page: ", page);
     this.setState({
       currentPage: page
     });
@@ -103,7 +99,7 @@ class Movies extends Component {
               <GenreList
                 genres={this.state.genres}
                 currentGenre={this.state.currentGenre}
-                onClick={genre => this.handleGenreSelection(genre)}
+                onClick={this.handleGenreSelection}
               />
             </div>
             <div className="col">

@@ -2,19 +2,20 @@ import React, { Component } from "react";
 
 class GenreList extends Component {
   render() {
-    console.log("Genres: ", this.props.genres, this.props.currentGenre.name);
+    const { onClick, currentGenre, genres } = this.props;
+
     return (
       <div className="list-group">
-        {this.props.genres.map(genre => {
+        {genres.map(genre => {
           return (
             <a
               className={
-                genre.name === this.props.currentGenre.name
+                genre.name === currentGenre.name
                   ? "list-group-item list-group-item-action active"
                   : "list-group-item list-group-item-action"
               }
               key={genre._id}
-              onClick={() => this.props.onClick(genre)}
+              onClick={() => onClick(genre)}
             >
               {genre.name}
             </a>
