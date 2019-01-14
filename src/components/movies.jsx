@@ -26,9 +26,9 @@ class Movies extends Component {
   }
 
   setupGenres() {
-    const genres = getGenres();
+    // const genres = getGenres();
     const all = { _id: "0", name: "All" };
-    return [all, ...genres];
+    return [all, ...getGenres()];
   }
 
   handleGenreSelection = genre => {
@@ -42,7 +42,8 @@ class Movies extends Component {
 
     this.setState({
       movies,
-      currentGenre: genre
+      currentGenre: genre,
+      currentPage: 1
     });
   };
 
