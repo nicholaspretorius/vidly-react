@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import DataRow from "./dataRow";
-import Pagination from "./common/pagination";
 
 class DataTable extends Component {
   render() {
+    const { onClick, onLike } = this.props;
     return (
       <React.Fragment>
         <div className="table-responsive">
@@ -24,18 +24,12 @@ class DataTable extends Component {
                   index={index}
                   movie={movie}
                   key={movie._id}
-                  onClick={() => this.props.onClick(movie)}
-                  onLike={() => this.props.onLike(movie)}
+                  onClick={() => onClick(movie)}
+                  onLike={() => onLike(movie)}
                 />
               ))}
             </tbody>
           </table>
-          <Pagination
-            count={this.props.allMovies.length}
-            pageSize={this.props.pageSize}
-            current={this.props.currentPage}
-            onPaginate={page => this.props.onPaginate(page)}
-          />
         </div>
       </React.Fragment>
     );

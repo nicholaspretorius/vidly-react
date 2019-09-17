@@ -8,7 +8,7 @@ class GenreList extends Component {
       <div className="list-group">
         {genres.map(genre => {
           return (
-            <a
+            <span
               className={
                 genre.name === currentGenre.name
                   ? "list-group-item list-group-item-action active"
@@ -18,7 +18,7 @@ class GenreList extends Component {
               onClick={() => onClick(genre)}
             >
               {genre.name}
-            </a>
+            </span>
           );
         })}
       </div>

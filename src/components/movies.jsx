@@ -3,6 +3,7 @@ import { getMovies, deleteMovie } from "./../services/fakeMovieService";
 import { getGenres } from "./../services/fakeGenreService";
 import DataTable from "./dataTable";
 import paginate from "./../utils/paginate";
+import Pagination from "./common/pagination";
 import GenreList from "./common/listGroup";
 
 class Movies extends Component {
@@ -77,40 +78,32 @@ class Movies extends Component {
   };
 
   render() {
-    const movies = paginate(
-      this.state.movies,
-      this.state.currentPage,
-      this.state.pageSize
-    );
+    const { movies, currentPage, pageSize, genres, currentGenre } = this.state;
+    const allMovies = paginate(movies, currentPage, pageSize);
     return (
       <div>
         <h3>Vidly React</h3>
-        {this.state.movies.length === 0 && (
-          <span>There are no currently no movies.</span>
-        )}
-        {
-          <p>
-            There are currently {this.state.movies.length} movies in the
-            database.
-          </p>
-        }
-        {this.state.movies.length > 0 && (
+        {movies.length === 0 && <span>There are no currently no movies.</span>}
+        {<p>There are currently {movies.length} movies in the database.</p>}
+        {movies.length > 0 && (
           <div className="row">
             <div className="col-3">
               <GenreList
-                genres={this.state.genres}
-                currentGenre={this.state.currentGenre}
+                genres={genres}
+                currentGenre={currentGenre}
                 onClick={this.handleGenreSelection}
               />
             </div>
             <div className="col">
               <DataTable
-                pageSize={this.state.pageSize}
-                currentPage={this.state.currentPage}
-                allMovies={this.state.movies}
-                movies={movies}
+                movies={allMovies}
                 onClick={movie => this.handleDelete(movie)}
                 onLike={movie => this.handleLike(movie)}
+              />
+              <Pagination
+                count={movies.length}
+                pageSize={pageSize}
+                current={currentPage}
                 onPaginate={page => this.handlePagination(page)}
               />
             </div>

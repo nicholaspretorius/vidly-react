@@ -3,23 +3,19 @@ import LikeButton from "./like";
 
 class DataRow extends Component {
   render() {
+    const { movie, onLike, onClick } = this.props;
+
     return (
       <tr>
-        <th scope="row">{this.props.movie.title}</th>
-        <td>{this.props.movie.genre.name}</td>
-        <td>{this.props.movie.numberInStock}</td>
-        <td>{this.props.movie.dailyRentalRate}</td>
+        <th scope="row">{movie.title}</th>
+        <td>{movie.genre.name}</td>
+        <td>{movie.numberInStock}</td>
+        <td>{movie.dailyRentalRate}</td>
         <td>
-          <LikeButton
-            liked={this.props.movie.liked}
-            onLike={() => this.props.onLike(this.props.movie)}
-          />
+          <LikeButton liked={movie.liked} onLike={() => onLike(movie)} />
         </td>
         <td>
-          <button
-            className="btn btn-danger btn-sm"
-            onClick={() => this.props.onClick(this.props.movie)}
-          >
+          <button className="btn btn-danger btn-sm" onClick={() => onClick(movie)}>
             Delete
           </button>
         </td>
