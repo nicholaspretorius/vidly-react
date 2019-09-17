@@ -84,15 +84,17 @@ class Movies extends Component {
   };
 
   render() {
+    const length = this.state.movies.length;
     const { movies, currentPage, pageSize, genres, currentGenre, sortColumn } = this.state;
     const sorted = _.orderBy(movies, [sortColumn.column], [sortColumn.order]);
     const allMovies = paginate(sorted, currentPage, pageSize);
+
     return (
       <div>
         <h3>Vidly React</h3>
-        {movies.length === 0 && <span>There are no currently no movies.</span>}
-        {<p>There are currently {movies.length} movies in the database.</p>}
-        {movies.length > 0 && (
+        {length === 0 && <span>There are no currently no movies.</span>}
+        {<p>There are currently {length} movies in the database.</p>}
+        {length > 0 && (
           <div className="row">
             <div className="col-3">
               <GenreList
@@ -110,7 +112,7 @@ class Movies extends Component {
                 sortColumn={sortColumn}
               />
               <Pagination
-                count={movies.length}
+                count={length}
                 pageSize={pageSize}
                 current={currentPage}
                 onPaginate={this.handlePagination}
