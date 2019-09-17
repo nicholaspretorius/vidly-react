@@ -11,8 +11,8 @@ class GenreList extends Component {
             <span
               className={
                 genre.name === currentGenre.name
-                  ? "list-group-item list-group-item-action active"
-                  : "list-group-item list-group-item-action"
+                  ? "list-group-item list-group-item-action clickable active"
+                  : "list-group-item list-group-item-action clickable"
               }
               key={genre._id}
               onClick={() => onClick(genre)}

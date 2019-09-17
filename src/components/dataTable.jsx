@@ -1,44 +1,24 @@
 import React, { Component } from "react";
 import DataRow from "./dataRow";
+import TableHeader from "./common/TableHeader";
 
 class DataTable extends Component {
-  sort = column => {
-    const sortColumn = { ...this.props.sortColumn };
-    console.log("Sort: ", sortColumn);
-    if (sortColumn.column === column) {
-      sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
-    } else {
-      sortColumn.column = column;
-      sortColumn.order = "asc";
-    }
-
-    this.props.onSort(sortColumn);
-  };
+  columns = [
+    { column: "title", label: "Title", sortable: true },
+    { column: "genre.name", label: "Genre", sortable: true },
+    { column: "numberInStock", label: "Stock", sortable: true },
+    { column: "dailyRentalRate", label: "Rate", sortable: true },
+    { column: "like", label: "Like", sortable: false },
+    { column: "action", label: "Action", sortable: false }
+  ];
 
   render() {
-    const { onClick, onLike } = this.props;
+    const { onClick, onLike, sortColumn, onSort } = this.props;
     return (
       <React.Fragment>
         <div className="table-responsive">
           <table className="table">
-            <thead>
-              <tr>
-                <th onClick={() => this.sort("title")} scope="col">
-                  Title
-                </th>
-                <th onClick={() => this.sort("genre.name")} scope="col">
-                  Genre
-                </th>
-                <th onClick={() => this.sort("numberInStock")} scope="col">
-                  Stock
-                </th>
-                <th onClick={() => this.sort("dailyRentalRate")} scope="col">
-                  Rate
-                </th>
-                <th scope="col">Like</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
+            <TableHeader columns={this.columns} sortColumn={sortColumn} onSort={onSort} />
             <tbody>
               {this.props.movies.map((movie, index) => (
                 <DataRow

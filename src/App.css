@@ -1,3 +1,9 @@
 .container {
   padding-top: 1em;
 }
+
+.page-link,
+.title-sort,
+.clickable {
+  cursor: pointer;
+}
