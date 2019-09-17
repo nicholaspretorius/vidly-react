@@ -2,24 +2,37 @@ import React, { Component } from "react";
 import DataRow from "./dataRow";
 
 class DataTable extends Component {
+  sort = column => {
+    const sortColumn = { ...this.props.sortColumn };
+    console.log("Sort: ", sortColumn);
+    if (sortColumn.column === column) {
+      sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
+    } else {
+      sortColumn.column = column;
+      sortColumn.order = "asc";
+    }
+
+    this.props.onSort(sortColumn);
+  };
+
   render() {
-    const { onClick, onLike, onSort } = this.props;
+    const { onClick, onLike } = this.props;
     return (
       <React.Fragment>
         <div className="table-responsive">
           <table className="table">
             <thead>
               <tr>
-                <th onClick={() => onSort("title")} scope="col">
+                <th onClick={() => this.sort("title")} scope="col">
                   Title
                 </th>
-                <th onClick={() => onSort("genre.name")} scope="col">
+                <th onClick={() => this.sort("genre.name")} scope="col">
                   Genre
                 </th>
-                <th onClick={() => onSort("numberInStock")} scope="col">
+                <th onClick={() => this.sort("numberInStock")} scope="col">
                   Stock
                 </th>
-                <th onClick={() => onSort("dailyRentalRate")} scope="col">
+                <th onClick={() => this.sort("dailyRentalRate")} scope="col">
                   Rate
                 </th>
                 <th scope="col">Like</th>
