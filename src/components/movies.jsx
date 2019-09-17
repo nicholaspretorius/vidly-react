@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import _ from "lodash";
 import { getMovies, deleteMovie } from "./../services/fakeMovieService";
 import { getGenres } from "./../services/fakeGenreService";
 import DataTable from "./dataTable";
@@ -14,6 +15,7 @@ class Movies extends Component {
       movies: [],
       genres: [],
       currentGenre: this.setupGenres()[0],
+      sortColumn: { column: "title", order: "asc" },
       pageSize: 3,
       currentPage: 1
     };
@@ -48,7 +50,7 @@ class Movies extends Component {
     });
   };
 
-  handleLike(movie) {
+  handleLike = movie => {
     const movies = this.state.movies.map(m => {
       if (m._id === movie._id) {
         m.liked = !movie.liked;
@@ -60,16 +62,16 @@ class Movies extends Component {
     this.setState({
       movies
     });
-  }
+  };
 
-  handleDelete(movie) {
+  handleDelete = movie => {
     deleteMovie(movie._id);
     const movies = getMovies();
     // const movies = this.state.movies.filter(m => m._id !== movie._id);
     this.setState({
       movies
     });
-  }
+  };
 
   handlePagination = page => {
     this.setState({
@@ -77,9 +79,22 @@ class Movies extends Component {
     });
   };
 
+  handleSort = column => {
+    const sortColumn = { ...this.state.sortColumn };
+    if (sortColumn.column === column) {
+      sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
+    } else {
+      sortColumn.column = column;
+      sortColumn.order = "asc";
+    }
+
+    this.setState({ sortColumn });
+  };
+
   render() {
-    const { movies, currentPage, pageSize, genres, currentGenre } = this.state;
-    const allMovies = paginate(movies, currentPage, pageSize);
+    const { movies, currentPage, pageSize, genres, currentGenre, sortColumn } = this.state;
+    const sorted = _.orderBy(movies, [sortColumn.column], [sortColumn.order]);
+    const allMovies = paginate(sorted, currentPage, pageSize);
     return (
       <div>
         <h3>Vidly React</h3>
@@ -97,14 +112,15 @@ class Movies extends Component {
             <div className="col">
               <DataTable
                 movies={allMovies}
-                onClick={movie => this.handleDelete(movie)}
-                onLike={movie => this.handleLike(movie)}
+                onClick={this.handleDelete}
+                onLike={this.handleLike}
+                onSort={this.handleSort}
               />
               <Pagination
                 count={movies.length}
                 pageSize={pageSize}
                 current={currentPage}
-                onPaginate={page => this.handlePagination(page)}
+                onPaginate={this.handlePagination}
               />
             </div>
           </div>
