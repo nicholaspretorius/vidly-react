@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { getMovies, deleteMovie } from "./../services/fakeMovieService";
 import { getGenres } from "./../services/fakeGenreService";
-import DataTable from "./dataTable";
+import DataTable from "./common/dataTable";
 import paginate from "./../utils/paginate";
 import Pagination from "./common/pagination";
 import GenreList from "./common/listGroup";
@@ -103,7 +103,7 @@ class Movies extends Component {
             </div>
             <div className="col">
               <DataTable
-                movies={allMovies}
+                data={allMovies}
                 onClick={this.handleDelete}
                 onLike={this.handleLike}
                 onSort={this.handleSort}

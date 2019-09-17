@@ -21,7 +21,7 @@ class TableHeader extends Component {
           {columns.map(column => {
             return (
               <th
-                className={column.sortable ? "title-sort" : ""}
+                className={column.sortable ? "clickable" : ""}
                 onClick={() => this.sort(column.column)}
                 scope="col"
                 key={column.label}
