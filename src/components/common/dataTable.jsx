@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import TableHeader from "./TableHeader";
-import TableBody from "./TableBody";
+import Table from "./Table";
 import LikeButton from "./like";
 
 class DataTable extends Component {
@@ -31,12 +30,7 @@ class DataTable extends Component {
     const { sortColumn, onSort, data } = this.props;
     return (
       <React.Fragment>
-        <div className="table-responsive">
-          <table className="table">
-            <TableHeader columns={this.columns} sortColumn={sortColumn} onSort={onSort} />
-            <TableBody data={data} columns={this.columns} />
-          </table>
-        </div>
+        <Table columns={this.columns} sortColumn={sortColumn} onSort={onSort} data={data} />
       </React.Fragment>
     );
   }

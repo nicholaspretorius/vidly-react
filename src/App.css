@@ -5,3 +5,11 @@
 .clickable {
   cursor: pointer;
 }
+
+.column-primary {
+  width: 30%;
+}
+
+.column-regular {
+  width: 14%;
+}
