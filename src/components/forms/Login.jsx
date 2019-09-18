@@ -1,25 +1,43 @@
 import React, { Component } from "react";
 
 class LoginForm extends Component {
+  username = React.createRef("username");
   state = {
-    emailAddress: "",
-    password: ""
+    account: {
+      emailAddress: "",
+      password: ""
+    }
   };
+
+  //   componentDidMount() {
+  //     this.username.current.focus();
+  //   }
 
   onFormSubmit = event => {
     event.preventDefault();
     console.log("Login", this.state);
   };
 
-  onHandleEmailChange = ({ target }) => {
-    this.setState({ emailAddress: target.value });
+  handleChange = ({ currentTarget: input }) => {
+    const account = { ...this.state.account };
+    account[input.name] = input.value;
+    this.setState({ account });
   };
 
-  onHandlePasswordChange = ({ target }) => {
-    this.setState({ password: target.value });
-  };
+  //   onHandleEmailChange = ({ target }) => {
+  //     const account = { ...this.state.account };
+  //     account.emailAddress = target.value;
+  //     this.setState({ account });
+  //   };
+
+  //   onHandlePasswordChange = ({ target }) => {
+  //     const account = { ...this.state.account };
+  //     account.password = target.value;
+  //     this.setState({ account });
+  //   };
 
   render() {
+    const { account } = this.state;
     return (
       <div className="container">
         <h3>Login Form</h3>
@@ -27,12 +45,16 @@ class LoginForm extends Component {
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Email address</label>
             <input
+              autoFocus
+              ref={this.username}
               type="email"
               className="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               placeholder="Enter email"
-              onChange={this.onHandleEmailChange}
+              value={account.emailAddress}
+              name="emailAddress"
+              onChange={this.handleChange}
             />
             <small id="emailHelp" className="form-text text-muted">
               We'll never share your email with anyone else.
@@ -45,7 +67,9 @@ class LoginForm extends Component {
               className="form-control"
               id="exampleInputPassword1"
               placeholder="Password"
-              onChange={this.onHandlePasswordChange}
+              value={account.password}
+              name="password"
+              onChange={this.handleChange}
             />
           </div>
           <div className="form-group form-check">
