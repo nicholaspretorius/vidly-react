@@ -1,10 +1,10 @@
 import React from "react";
 import MovieForm from "./forms/Movie";
 
-const CreateMoviePage = () => {
+const CreateMoviePage = props => {
   return (
     <div className="container">
-      <MovieForm />
+      <MovieForm {...props} />
     </div>
   );
 };

@@ -1,55 +1,55 @@
-import React, { Component } from "react";
+import React from "react";
+import Joi from "joi-browser";
 
-class MovieForm extends Component {
-  state = {};
+import Form from "./../common/Form";
+import { saveMovie } from "./../../services/fakeMovieService";
+
+class MovieForm extends Form {
+  state = {
+    data: {
+      name: "",
+      genre: "",
+      dailyRentalRate: "",
+      numberInStock: ""
+    },
+    errors: {}
+  };
+
+  schema = {
+    name: Joi.string()
+      .required()
+      .label("Title"),
+    genre: Joi.string()
+      .required()
+      .label("Genre"),
+    dailyRentalRate: Joi.number()
+      .positive()
+      .max(10)
+      .required()
+      .label("Daily Rental Rate"),
+    numberInStock: Joi.number()
+      .positive()
+      .min(1)
+      .required()
+      .label("Units in stock")
+  };
+
+  doSubmit = () => {
+    const res = saveMovie(this.state.data);
+    console.log("Create movie", res);
+    this.props.history.push("/movies");
+  };
+
   render() {
     return (
       <div className="container">
         <h3>Create Movie Form</h3>
-        <form>
-          <div className="form-group">
-            <label htmlFor="title">Title</label>
-            <input
-              type="text"
-              className="form-control"
-              id="title"
-              aria-describedby="titleHelp"
-              placeholder="Enter title"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="genre">Genre</label>
-            <select className="form-control" id="genre">
-              <option>Action</option>
-              <option>Comedy</option>
-              <option>Drama</option>
-              <option>Horror</option>
-              <option>Sci-fi/Fantasy</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="rating">Rating</label>
-            <input
-              type="number"
-              className="form-control"
-              id="rating"
-              aria-describedby="ratingHelp"
-              placeholder="Enter rating"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="stock">Units in Stock</label>
-            <input
-              type="number"
-              className="form-control"
-              id="stock"
-              aria-describedby="stockHelp"
-              placeholder="Enter number of units in stock"
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Add Movie
-          </button>
+        <form onSubmit={this.handleSubmit}>
+          {this.renderInput("name", "Title")}
+          {this.renderInput("dailyRentalRate", "Daily Rental Rate", "number")}
+          {this.renderInput("numberInStock", "Units in stock", "number")}
+          {this.renderSelect("genre", "Genre", ["Action", "Comedy", "Horror", "Sci-Fi/Fantasy"])}
+          {this.renderSubmitButton("Add movie")}
         </form>
       </div>
     );
