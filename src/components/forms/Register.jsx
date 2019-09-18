@@ -1,82 +1,58 @@
-import React, { Component } from "react";
+import React from "react";
+import Joi from "joi-browser";
 
-import Input from "./../common/Input";
+import Form from "./../common/Form";
 
-class RegisterForm extends Component {
+class RegisterForm extends Form {
   state = {
-    account: {
+    data: {
       firstName: "",
-      lastName: "",
       emailAddress: "",
-      password: "",
+      password1: "",
+      // password2: "",
       terms: false
-    }
+    },
+    errors: {}
   };
 
-  onSubmit = event => {
-    event.preventDefault();
-    console.log(this.state.account);
+  schema = {
+    firstName: Joi.string()
+      .required()
+      .label("First name"),
+    emailAddress: Joi.string()
+      .email()
+      .required()
+      .label("Email address"),
+    password1: Joi.string()
+      .min(5)
+      .max(24)
+      .required()
+      .label("Password"),
+    terms: Joi.boolean()
+    // password2: Joi.ref("password1")
   };
 
-  handleChange = ({ currentTarget: input }) => {
-    const account = { ...this.state.account };
-    account[input.name] = input.value;
-    this.setState({ account });
+  doSubmit = () => {
+    console.log("Register");
   };
 
   render() {
-    const { account } = this.state;
     return (
       <div className="container">
         <h3>Register Form</h3>
-        <form onSubmit={this.onSubmit}>
-          <Input
-            name="firstName"
-            label="First name"
-            type="text"
-            onChange={this.handleChange}
-            value={account.firstName}
-          />
-          <div className="form-group">
-            <label htmlFor="lastName">Last name</label>
-            <input
-              type="text"
-              className="form-control"
-              id="lastName"
-              aria-describedby="lastNameHelp"
-              placeholder="Enter last name"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="emailAddress">Email address</label>
-            <input
-              type="email"
-              className="form-control"
-              id="emailAddress"
-              aria-describedby="emailAddressHelp"
-              placeholder="Enter email address"
-            />
-            <small id="emailAddressHelp" className="form-text text-muted">
-              We'll never share your email with anyone else.
-            </small>
-          </div>
-          <div className="form-group">
-            <label htmlFor="password1">Password</label>
-            <input type="password" className="form-control" id="password1" placeholder="Password" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password2">Confirm password</label>
-            <input type="password" className="form-control" id="password2" placeholder="Password" />
-          </div>
+        <form onSubmit={this.handleSubmit}>
+          {this.renderInput("firstName", "First name")}
+          {this.renderInput("emailAddress", "Email address", "email")}
+          {this.renderInput("password1", "Password", "password")}
+          {/* {this.renderInput("password2", "Confirm password", "password")} */}
+
           <div className="form-group form-check">
             <input type="checkbox" className="form-check-input" id="terms" />
             <label className="form-check-label" htmlFor="terms">
               Agree to terms and conditions
             </label>
           </div>
-          <button type="submit" className="btn btn-primary">
-            Register
-          </button>
+          {this.renderSubmitButton("Register")}
         </form>
       </div>
     );

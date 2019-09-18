@@ -5,15 +5,15 @@ const Input = ({ name, value, label, type, error, onChange }) => {
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
       <input
-        autoFocus
         type={type}
-        className="form-control"
-        id={name}
-        name={name}
-        aria-describedby={`${name}Help`}
-        placeholder={`Enter ${label}`}
         value={value}
         onChange={onChange}
+        name={name}
+        id={name}
+        autoFocus
+        className="form-control"
+        aria-describedby={`${name}Help`}
+        placeholder={`Enter ${label.toLowerCase()}`}
       />
       {error && <div className="alert alert-danger">{error}</div>}
     </div>
