@@ -10,7 +10,7 @@ class Movie extends Component {
     return (
       <div>
         <h3>Title ID: {params.id}</h3>
-        <button type="button" onClick={this.saveHandler}>
+        <button type="button" className="btn btn-primary" onClick={this.saveHandler}>
           Save
         </button>
       </div>
