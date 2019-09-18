@@ -18,8 +18,7 @@ class App extends Component {
         <NavBar />
         <main className="container">
           <Switch>
-            <Route path="/movies/create" exact component={CreateMoviePage} />
-            <Route path="/movies/:id" component={Movie} />
+            <Route path="/movies/:id" component={CreateMoviePage} />
             <Route path="/movies" component={Movies} />
             <Route path="/customers" component={Customers} />
             <Route path="/rentals" component={Rentals} />
