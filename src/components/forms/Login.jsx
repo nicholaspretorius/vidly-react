@@ -1,12 +1,29 @@
 import React, { Component } from "react";
 
 class LoginForm extends Component {
-  state = {};
+  state = {
+    emailAddress: "",
+    password: ""
+  };
+
+  onFormSubmit = event => {
+    event.preventDefault();
+    console.log("Login", this.state);
+  };
+
+  onHandleEmailChange = ({ target }) => {
+    this.setState({ emailAddress: target.value });
+  };
+
+  onHandlePasswordChange = ({ target }) => {
+    this.setState({ password: target.value });
+  };
+
   render() {
     return (
       <div className="container">
         <h3>Login Form</h3>
-        <form>
+        <form onSubmit={this.onFormSubmit}>
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Email address</label>
             <input
@@ -15,6 +32,7 @@ class LoginForm extends Component {
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               placeholder="Enter email"
+              onChange={this.onHandleEmailChange}
             />
             <small id="emailHelp" className="form-text text-muted">
               We'll never share your email with anyone else.
@@ -27,6 +45,7 @@ class LoginForm extends Component {
               className="form-control"
               id="exampleInputPassword1"
               placeholder="Password"
+              onChange={this.onHandlePasswordChange}
             />
           </div>
           <div className="form-group form-check">
