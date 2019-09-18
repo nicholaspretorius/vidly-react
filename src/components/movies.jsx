@@ -91,7 +91,6 @@ class Movies extends Component {
 
     return (
       <div>
-        <h3>Vidly React</h3>
         {length === 0 && <span>There are no currently no movies.</span>}
         {<p>There are currently {length} movies in the database.</p>}
         {length > 0 && (
