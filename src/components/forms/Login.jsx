@@ -43,17 +43,17 @@ class LoginForm extends Component {
         <h3>Login Form</h3>
         <form onSubmit={this.onFormSubmit}>
           <div className="form-group">
-            <label htmlFor="exampleInputEmail1">Email address</label>
+            <label htmlFor="emailAddress">Email address</label>
             <input
               autoFocus
-              ref={this.username}
               type="email"
               className="form-control"
-              id="exampleInputEmail1"
+              id="emailAddress"
+              name="emailAddress"
               aria-describedby="emailHelp"
               placeholder="Enter email"
+              ref={this.username}
               value={account.emailAddress}
-              name="emailAddress"
               onChange={this.handleChange}
             />
             <small id="emailHelp" className="form-text text-muted">

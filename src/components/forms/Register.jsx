@@ -1,22 +1,41 @@
 import React, { Component } from "react";
 
+import Input from "./../common/Input";
+
 class RegisterForm extends Component {
-  state = {};
+  state = {
+    account: {
+      firstName: "",
+      lastName: "",
+      emailAddress: "",
+      password: "",
+      terms: false
+    }
+  };
+
+  onSubmit = event => {
+    event.preventDefault();
+    console.log(this.state.account);
+  };
+
+  handleChange = ({ currentTarget: input }) => {
+    const account = { ...this.state.account };
+    account[input.name] = input.value;
+    this.setState({ account });
+  };
+
   render() {
+    const { account } = this.state;
     return (
       <div className="container">
         <h3>Register Form</h3>
-        <form>
-          <div className="form-group">
-            <label htmlFor="firstName">First name</label>
-            <input
-              type="text"
-              className="form-control"
-              id="firstName"
-              aria-describedby="firstNameHelp"
-              placeholder="Enter first name"
-            />
-          </div>
+        <form onSubmit={this.onSubmit}>
+          <Input
+            name="firstName"
+            label="First name"
+            onChange={this.handleChange}
+            value={account.firstName}
+          />
           <div className="form-group">
             <label htmlFor="lastName">Last name</label>
             <input
