@@ -33,6 +33,7 @@ class RegisterForm extends Component {
           <Input
             name="firstName"
             label="First name"
+            type="text"
             onChange={this.handleChange}
             value={account.firstName}
           />
