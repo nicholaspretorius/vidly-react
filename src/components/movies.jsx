@@ -105,7 +105,9 @@ class Movies extends Component {
               />
             </div>
             <div className="col">
-              <Link to="/movies/new">Add movie</Link>
+              <Link to="/movies/new" className="btn btn-primary" style={{ marginBottom: 20 }}>
+                Add movie
+              </Link>
               <SearchForm />
               <DataTable
                 data={allMovies}

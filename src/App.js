@@ -5,7 +5,6 @@ import NavBar from "./components/Navbar";
 import Movies from "./components/movies.jsx";
 import Customers from "./components/Customers";
 import Rentals from "./components/Rentals";
-import Movie from "./components/Movie";
 import CreateMoviePage from "./components/CreateMovie";
 import LoginPage from "./components/Login";
 import RegisterPage from "./components/Register";
