@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import _ from "lodash";
-import { getMovies, deleteMovie } from "./../services/fakeMovieService";
-import { getGenres } from "./../services/fakeGenreService";
+// import { getMovies, deleteMovie } from "./../services/fakeMovieService";
+import { getMovies, deleteMovie } from "./../services/movies";
+// import { getGenres } from "./../services/fakeGenreService";
+import { getGenres } from "./../services/genres";
 import DataTable from "./common/dataTable";
 import paginate from "./../utils/paginate";
 import Pagination from "./common/pagination";
@@ -16,37 +18,49 @@ class Movies extends Component {
     this.state = {
       movies: [],
       genres: [],
-      currentGenre: this.setupGenres()[0],
+      currentGenre: { _id: "0", name: "All" }, //this.setupGenres()[0],
       sortColumn: { column: "title", order: "asc" },
       pageSize: 3,
       currentPage: 1
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({
-      movies: getMovies(),
-      genres: this.setupGenres()
+      movies: await getMovies(),
+      genres: await this.setupGenres()
     });
   }
 
-  setupGenres() {
-    // const genres = getGenres();
-    const all = { _id: "0", name: "All" };
-    return [all, ...getGenres()];
+  async setupGenres() {
+    const genres = await getGenres();
+    const all = [{ _id: "0", name: "All" }, ...genres];
+    // return [all, ...genres];
+    return all;
   }
 
-  handleGenreSelection = genre => {
-    const movies = getMovies().filter(movie => {
+  handleGenreSelection = async genre => {
+    console.log("Genre selection: ", genre);
+    const movies = await getMovies();
+    const filtered = movies.filter(movie => {
+      console.log("Movie: ", movie);
       if (genre.name === "All") {
         return movie;
       } else {
+        console.log(
+          "Genre: ",
+          genre.name,
+          " ",
+          genre.name === movie.genre.name,
+          " Movie: ",
+          movie.genre.name
+        );
         return genre.name === movie.genre.name;
       }
     });
 
     this.setState({
-      movies,
+      movies: filtered,
       currentGenre: genre,
       currentPage: 1
     });
@@ -66,9 +80,9 @@ class Movies extends Component {
     });
   };
 
-  handleDelete = movie => {
-    deleteMovie(movie._id);
-    const movies = getMovies();
+  handleDelete = async movie => {
+    await deleteMovie(movie._id);
+    const movies = await getMovies();
     // const movies = this.state.movies.filter(m => m._id !== movie._id);
     this.setState({
       movies
@@ -90,41 +104,44 @@ class Movies extends Component {
     const { movies, currentPage, pageSize, genres, currentGenre, sortColumn } = this.state;
     const sorted = _.orderBy(movies, [sortColumn.column], [sortColumn.order]);
     const allMovies = paginate(sorted, currentPage, pageSize);
+    console.log("Genres component: ", genres);
 
     return (
       <div>
-        {length === 0 && <span>There are no currently no movies.</span>}
-        {<p>There are currently {length} movies in the database.</p>}
-        {length > 0 && (
-          <div className="row">
-            <div className="col-3">
-              <GenreList
-                genres={genres}
-                currentGenre={currentGenre}
-                onClick={this.handleGenreSelection}
-              />
-            </div>
-            <div className="col">
-              <Link to="/movies/new" className="btn btn-primary" style={{ marginBottom: 20 }}>
-                Add movie
-              </Link>
-              <SearchForm />
-              <DataTable
-                data={allMovies}
-                onClick={this.handleDelete}
-                onLike={this.handleLike}
-                onSort={this.handleSort}
-                sortColumn={sortColumn}
-              />
-              <Pagination
-                count={length}
-                pageSize={pageSize}
-                current={currentPage}
-                onPaginate={this.handlePagination}
-              />
-            </div>
+        <div className="row">
+          <div className="col-3">
+            <GenreList
+              genres={genres}
+              currentGenre={currentGenre}
+              onClick={this.handleGenreSelection}
+            />
           </div>
-        )}
+          <div className="col">
+            <Link to="/movies/new" className="btn btn-primary" style={{ marginBottom: 20 }}>
+              Add movie
+            </Link>
+            <SearchForm />
+            {length === 0 && <span>There are no currently no movies.</span>}
+            {<p>There are currently {length} movies in the database.</p>}
+            {length > 0 && (
+              <React.Fragment>
+                <DataTable
+                  data={allMovies}
+                  onClick={this.handleDelete}
+                  onLike={this.handleLike}
+                  onSort={this.handleSort}
+                  sortColumn={sortColumn}
+                />
+                <Pagination
+                  count={length}
+                  pageSize={pageSize}
+                  current={currentPage}
+                  onPaginate={this.handlePagination}
+                />
+              </React.Fragment>
+            )}
+          </div>
+        </div>
       </div>
     );
   }
