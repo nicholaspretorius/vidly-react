@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import _ from "lodash";
-// import { getMovies, deleteMovie } from "./../services/fakeMovieService";
+import { toast } from "react-toastify";
+
 import { getMovies, deleteMovie } from "./../services/movies";
-// import { getGenres } from "./../services/fakeGenreService";
 import { getGenres } from "./../services/genres";
 import DataTable from "./common/dataTable";
 import paginate from "./../utils/paginate";
@@ -81,12 +81,17 @@ class Movies extends Component {
   };
 
   handleDelete = async movie => {
-    await deleteMovie(movie._id);
-    const movies = await getMovies();
-    // const movies = this.state.movies.filter(m => m._id !== movie._id);
-    this.setState({
-      movies
-    });
+    const backup = this.state.movies;
+    const movies = this.state.movies.filter(m => m._id !== movie._id);
+    this.setState({ movies });
+    try {
+      await deleteMovie(movie._id);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        toast.error("This post has already been deleted.");
+      }
+      this.setState({ movies: backup });
+    }
   };
 
   handlePagination = page => {

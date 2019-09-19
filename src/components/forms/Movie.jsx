@@ -1,5 +1,6 @@
 import React from "react";
 import Joi from "joi-browser";
+import { toast } from "react-toastify";
 
 import Form from "./../common/Form";
 import { saveMovie, getMovie } from "./../../services/movies";
@@ -37,17 +38,28 @@ class MovieForm extends Form {
       .label("Units in stock")
   };
 
-  async componentDidMount() {
+  async populateGenres() {
     const genres = await getGenres();
     this.setState({ genres });
+  }
 
-    const movieId = this.props.match.params.id;
-    if (movieId === "new") return;
+  async populateMovies() {
+    try {
+      const movieId = this.props.match.params.id;
+      if (movieId === "new") return;
+      const movie = await getMovie(movieId);
+      this.setState({ data: this.mapViewToModel(movie) });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        toast.error("This movie does not exit.");
+        this.props.history.replace("/not-found");
+      }
+    }
+  }
 
-    const movie = await getMovie(movieId);
-    //if (!movie) return this.props.history.replace("/not-found");
-
-    this.setState({ data: this.mapViewToModel(movie) });
+  async componentDidMount() {
+    await this.populateGenres();
+    await this.populateMovies();
   }
 
   mapViewToModel(movie) {
@@ -61,9 +73,15 @@ class MovieForm extends Form {
   }
 
   doSubmit = async () => {
-    const res = await saveMovie(this.state.data);
-    console.log("Create movie", res);
-    this.props.history.push("/movies");
+    try {
+      const res = await saveMovie(this.state.data);
+      console.log("Create movie", res);
+      this.props.history.push("/movies");
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        toast.error("Something went wrong.");
+      }
+    }
   };
 
   render() {

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import NavBar from "./components/Navbar";
 import Movies from "./components/movies.jsx";
@@ -16,6 +18,7 @@ class App extends Component {
       <div>
         <NavBar />
         <main className="container">
+          <ToastContainer />
           <Switch>
             <Route path="/movies/:id" component={CreateMoviePage} />
             <Route path="/movies" component={Movies} />
