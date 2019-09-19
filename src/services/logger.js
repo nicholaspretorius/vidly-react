@@ -1,14 +1,16 @@
-import * as Sentry from "@sentry/browser";
+// import * as Sentry from "@sentry/browser";
 
-import config from "./../config";
+// import config from "./../config";
 
 function init() {
-  Sentry.init({ dsn: config.logger });
+  console.log("Init Logger");
+  //Sentry.init({ dsn: config.logger });
 }
 
 function log(error) {
-  console.error(error);
-  Sentry.captureException(error);
+  console.log("Logger: Error -> ");
+  // console.error(error);
+  // Sentry.captureException(error);
 }
 
 export default {

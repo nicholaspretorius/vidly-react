@@ -1,18 +1,20 @@
 import React from "react";
 import Joi from "joi-browser";
+
 import Form from "../common/Form";
+import { login } from "./../../services/auth";
 
 class LoginForm extends Form {
   state = {
     data: {
-      emailAddress: "",
+      email: "",
       password: ""
     },
     errors: {}
   };
 
   schema = {
-    emailAddress: Joi.string()
+    email: Joi.string()
       .email()
       .required()
       .label("Email address"),
@@ -23,9 +25,25 @@ class LoginForm extends Form {
       .label("Password")
   };
 
-  doSubmit = () => {
-    // call server
-    console.log("Login", this.state);
+  doSubmit = async () => {
+    try {
+      const req = {
+        email: this.state.data.email,
+        password: this.state.data.password
+      };
+
+      const res = await login(req.email, req.password);
+      console.log("Login: ", res);
+    } catch (ex) {
+      console.log("Login:Error -> ", ex.response);
+
+      if (ex.response && ex.response.status === 400) {
+        console.log("Ex: ", ex);
+        const errors = { ...this.state.errors };
+        errors.email = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   };
 
   render() {
@@ -33,7 +51,7 @@ class LoginForm extends Form {
       <div className="container">
         <h3>Login Form</h3>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("emailAddress", "Email address", "email")}
+          {this.renderInput("email", "Email address", "email")}
           {this.renderInput("password", "Password", "password")}
 
           <div className="form-group form-check">

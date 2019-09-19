@@ -1,13 +1,15 @@
 import React from "react";
 import Joi from "joi-browser";
+// import { toast } from "react-toastify";
 
 import Form from "./../common/Form";
+import { createUser } from "./../../services/users";
 
 class RegisterForm extends Form {
   state = {
     data: {
-      firstName: "",
-      emailAddress: "",
+      name: "",
+      email: "",
       password1: "",
       // password2: "",
       terms: false
@@ -16,10 +18,10 @@ class RegisterForm extends Form {
   };
 
   schema = {
-    firstName: Joi.string()
+    name: Joi.string()
       .required()
       .label("First name"),
-    emailAddress: Joi.string()
+    email: Joi.string()
       .email()
       .required()
       .label("Email address"),
@@ -32,8 +34,25 @@ class RegisterForm extends Form {
     // password2: Joi.ref("password1")
   };
 
-  doSubmit = () => {
+  doSubmit = async () => {
     console.log("Register");
+    try {
+      const user = {
+        name: this.state.data.name,
+        email: this.state.data.email,
+        password: this.state.data.password1
+      };
+      await createUser(user);
+      //this.props.history.push("/login");
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        console.log("Ex: ", ex);
+        const errors = { ...this.state.errors };
+        errors.email = ex.response.data;
+        this.setState({ errors });
+      }
+    }
+    // toast.success("Congratulations, you have been successfully registered!");
   };
 
   render() {
@@ -41,8 +60,8 @@ class RegisterForm extends Form {
       <div className="container">
         <h3>Register Form</h3>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("firstName", "First name")}
-          {this.renderInput("emailAddress", "Email address", "email")}
+          {this.renderInput("name", "First name")}
+          {this.renderInput("email", "Email address", "email")}
           {this.renderInput("password1", "Password", "password")}
           {/* {this.renderInput("password2", "Confirm password", "password")} */}
 

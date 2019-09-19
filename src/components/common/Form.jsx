@@ -21,7 +21,7 @@ class Form extends Component {
     for (let item of error.details) {
       errors[item.path[0]] = item.message;
     }
-    console.log(errors);
+    //console.log(errors);
     return errors;
   };
 
@@ -50,7 +50,7 @@ class Form extends Component {
     event.preventDefault();
     const errors = this.validate();
     this.setState({ errors: errors || {} });
-    console.log("Errors: ", errors);
+    //console.log("Errors: ", errors);
     if (errors) return;
 
     this.doSubmit();
