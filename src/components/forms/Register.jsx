@@ -4,6 +4,7 @@ import Joi from "joi-browser";
 
 import Form from "./../common/Form";
 import { createUser } from "./../../services/users";
+import { loginWithJwt } from "./../../services/auth";
 
 class RegisterForm extends Form {
   state = {
@@ -42,7 +43,8 @@ class RegisterForm extends Form {
         password: this.state.data.password1
       };
       const res = await createUser(user);
-      localStorage.setItem("token", res.headers["x-auth-token"]);
+      loginWithJwt(res.headers["x-auth-token"]);
+      //localStorage.setItem("token", res.headers["x-auth-token"]);
       this.props.history.push("/movies");
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
