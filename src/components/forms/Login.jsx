@@ -32,8 +32,9 @@ class LoginForm extends Form {
         password: this.state.data.password
       };
 
-      const res = await login(req.email, req.password);
-      console.log("Login: ", res);
+      const { data: jwt } = await login(req.email, req.password);
+      localStorage.setItem("token", jwt);
+      this.props.history.push("/movies");
     } catch (ex) {
       console.log("Login:Error -> ", ex.response);
 

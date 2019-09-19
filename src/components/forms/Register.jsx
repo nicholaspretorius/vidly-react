@@ -35,15 +35,15 @@ class RegisterForm extends Form {
   };
 
   doSubmit = async () => {
-    console.log("Register");
     try {
       const user = {
         name: this.state.data.name,
         email: this.state.data.email,
         password: this.state.data.password1
       };
-      await createUser(user);
-      //this.props.history.push("/login");
+      const res = await createUser(user);
+      localStorage.setItem("token", res.headers["x-auth-token"]);
+      this.props.history.push("/movies");
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log("Ex: ", ex);
@@ -52,7 +52,6 @@ class RegisterForm extends Form {
         this.setState({ errors });
       }
     }
-    // toast.success("Congratulations, you have been successfully registered!");
   };
 
   render() {
