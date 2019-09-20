@@ -1,6 +1,6 @@
 import React from "react";
 
-const SearchForm = () => {
+const SearchForm = ({ value, onChange }) => {
   return (
     <form>
       <div className="form-group">
@@ -9,6 +9,9 @@ const SearchForm = () => {
           type="text"
           className="form-control"
           id="searchQuery"
+          name="searchQuery"
+          value={value}
+          onChange={e => onChange(e.currentTarget.value)}
           aria-describedby="searchQueryHelp"
           placeholder="Enter search term"
         />

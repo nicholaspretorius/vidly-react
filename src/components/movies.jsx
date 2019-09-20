@@ -18,52 +18,32 @@ class Movies extends Component {
     this.state = {
       movies: [],
       genres: [],
-      currentGenre: { _id: "0", name: "All" }, //this.setupGenres()[0],
-      sortColumn: { column: "title", order: "asc" },
+      currentPage: 1,
       pageSize: 3,
-      currentPage: 1
+      searchQuery: "",
+      selectedGenre: { _id: "", name: "All Genres" },
+      sortColumn: { column: "title", order: "asc" }
     };
   }
 
   async componentDidMount() {
-    this.setState({
-      movies: await getMovies(),
-      genres: await this.setupGenres()
-    });
-  }
+    const data = await getGenres();
+    const genres = [{ _id: "", name: "All Genres" }, ...data];
 
-  async setupGenres() {
-    const genres = await getGenres();
-    const all = [{ _id: "0", name: "All" }, ...genres];
-    // return [all, ...genres];
-    return all;
+    const movies = await getMovies();
+    this.setState({ movies, genres });
   }
 
   handleGenreSelection = async genre => {
-    console.log("Genre selection: ", genre);
-    const movies = await getMovies();
-    const filtered = movies.filter(movie => {
-      console.log("Movie: ", movie);
-      if (genre.name === "All") {
-        return movie;
-      } else {
-        console.log(
-          "Genre: ",
-          genre.name,
-          " ",
-          genre.name === movie.genre.name,
-          " Movie: ",
-          movie.genre.name
-        );
-        return genre.name === movie.genre.name;
-      }
-    });
-
     this.setState({
-      movies: filtered,
-      currentGenre: genre,
+      searchQuery: "",
+      selectedGenre: genre,
       currentPage: 1
     });
+  };
+
+  handleSearch = query => {
+    this.setState({ searchQuery: query, selectedGenre: "All Genres", currentPage: 1 });
   };
 
   handleLike = movie => {
@@ -104,13 +84,37 @@ class Movies extends Component {
     this.setState({ sortColumn });
   };
 
+  getPagedData = () => {
+    const {
+      pageSize,
+      currentPage,
+      sortColumn,
+      selectedGenre,
+      searchQuery,
+      movies: allMovies
+    } = this.state;
+
+    let filtered = allMovies;
+    if (searchQuery)
+      filtered = allMovies.filter(m => m.title.toLowerCase().startsWith(searchQuery.toLowerCase()));
+    else if (selectedGenre && selectedGenre._id)
+      filtered = allMovies.filter(m => m.genre._id === selectedGenre._id);
+
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+    const movies = paginate(sorted, currentPage, pageSize);
+
+    return { totalCount: filtered.length, data: movies };
+  };
+
   render() {
-    const length = this.state.movies.length;
-    const { movies, currentPage, pageSize, genres, currentGenre, sortColumn } = this.state;
-    const sorted = _.orderBy(movies, [sortColumn.column], [sortColumn.order]);
-    const allMovies = paginate(sorted, currentPage, pageSize);
+    const { length } = this.state.movies;
+    const { currentPage, pageSize, searchQuery, sortColumn, selectedGenre, genres } = this.state;
     const { user } = this.props;
-    console.log("Genres component: ", genres);
+
+    const { totalCount, data: movies } = this.getPagedData();
+
+    if (length === 0) return <p>There are no movies in the database.</p>;
 
     return (
       <div>
@@ -118,8 +122,8 @@ class Movies extends Component {
           <div className="col-3">
             <GenreList
               genres={genres}
-              currentGenre={currentGenre}
-              onClick={this.handleGenreSelection}
+              selectedGenre={selectedGenre}
+              onItemSelect={this.handleGenreSelection}
             />
           </div>
           <div className="col">
@@ -128,13 +132,13 @@ class Movies extends Component {
                 Add movie
               </Link>
             )}
-            <SearchForm />
-            {length === 0 && <span>There are no currently no movies.</span>}
-            {<p>There are currently {length} movies in the database.</p>}
-            {length > 0 && (
+            <SearchForm value={searchQuery} onChange={this.handleSearch} />
+            {totalCount === 0 && <span>There are no currently no movies.</span>}
+            {<p>There are currently {totalCount} movies in the database.</p>}
+            {totalCount > 0 && (
               <React.Fragment>
                 <DataTable
-                  data={allMovies}
+                  data={movies}
                   onClick={this.handleDelete}
                   onLike={this.handleLike}
                   onSort={this.handleSort}

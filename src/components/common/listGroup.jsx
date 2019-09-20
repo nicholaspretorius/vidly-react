@@ -2,9 +2,9 @@ import React, { Component } from "react";
 
 class GenreList extends Component {
   render() {
-    const { onClick, currentGenre, genres } = this.props;
+    const { onItemSelect, selectedGenre, genres } = this.props;
     console.log("Genres: ", genres);
-    console.log("Current genre: ", currentGenre);
+    console.log("Current genre: ", selectedGenre);
 
     return (
       <div className="list-group">
@@ -13,12 +13,12 @@ class GenreList extends Component {
             return (
               <span
                 className={
-                  genre && genre.name === currentGenre.name
+                  genre && genre.name === selectedGenre.name
                     ? "list-group-item list-group-item-action clickable active"
                     : "list-group-item list-group-item-action clickable"
                 }
                 key={genre._id}
-                onClick={() => onClick(genre)}
+                onClick={() => onItemSelect(genre)}
               >
                 {genre.name}
               </span>
@@ -28,5 +28,10 @@ class GenreList extends Component {
     );
   }
 }
+
+GenreList.defaultProps = {
+  textProperty: "name",
+  valueProperty: "_id"
+};
 
 export default GenreList;

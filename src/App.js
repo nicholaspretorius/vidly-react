@@ -12,6 +12,7 @@ import LoginPage from "./components/Login";
 import Logout from "./components/Logout";
 import RegisterPage from "./components/Register";
 import NotFound from "./components/NotFound";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 import { getCurrentUser } from "./services/auth";
 
 class App extends Component {
@@ -31,14 +32,15 @@ class App extends Component {
         <main className="container">
           <ToastContainer />
           <Switch>
-            <Route
+            <ProtectedRoute path="/movies/:id" component={CreateMoviePage} {...this.props} />
+            {/* <Route
               path="/movies/:id"
               render={props => {
                 if (!user) return <Redirect to="/movies" />;
                 return <CreateMoviePage {...props} />;
               }}
-            />
-            <Route path="/movies" render={props => <Movies {...props} />} user={user} />
+            /> */}
+            <Route path="/movies" render={props => <Movies {...props} user={user} />} />
             <Route path="/customers" component={Customers} />
             <Route path="/rentals" component={Rentals} />
             <Route path="/not-found" component={NotFound} />
