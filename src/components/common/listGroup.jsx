@@ -3,8 +3,6 @@ import React, { Component } from "react";
 class GenreList extends Component {
   render() {
     const { onItemSelect, selectedGenre, genres } = this.props;
-    console.log("Genres: ", genres);
-    console.log("Current genre: ", selectedGenre);
 
     return (
       <div className="list-group">

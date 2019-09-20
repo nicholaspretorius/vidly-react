@@ -26,6 +26,9 @@ class App extends Component {
   render() {
     const { user } = this.state;
 
+    console.log("App: ", process.env.REACT_APP_NAME);
+    console.log("Version: ", process.env.REACT_APP_VERSION);
+
     return (
       <div>
         <NavBar user={user} />

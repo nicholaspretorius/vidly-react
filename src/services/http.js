@@ -3,6 +3,8 @@ import { toast } from "react-toastify";
 
 import logger from "./logger";
 
+// axios.defaults.baseURL = process.env.REACT_APP_API; convert .envs and services to use only path
+
 axios.interceptors.response.use(null, error => {
   const expectedError =
     error.response && error.response.status >= 400 && error.response.status < 500;
