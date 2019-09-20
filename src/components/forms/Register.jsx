@@ -1,10 +1,10 @@
 import React from "react";
 import Joi from "joi-browser";
-// import { toast } from "react-toastify";
+import { Redirect } from "react-router-dom";
 
 import Form from "./../common/Form";
 import { createUser } from "./../../services/users";
-import { loginWithJwt } from "./../../services/auth";
+import { loginWithJwt, getCurrentUser } from "./../../services/auth";
 
 class RegisterForm extends Form {
   state = {
@@ -57,6 +57,7 @@ class RegisterForm extends Form {
   };
 
   render() {
+    if (getCurrentUser()) return <Redirect to="/" />;
     return (
       <div className="container">
         <h3>Register Form</h3>

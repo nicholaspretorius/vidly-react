@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Table from "./Table";
 import LikeButton from "./like";
+import { getCurrentUser } from "../../services/auth";
 
 class DataTable extends Component {
   columns = [
@@ -13,18 +14,29 @@ class DataTable extends Component {
       label: "Like",
       sortable: false,
       content: item => <LikeButton liked={item.liked} onLike={() => this.props.onLike(item)} />
-    },
-    {
-      column: "action",
-      label: "Action",
-      sortable: false,
-      content: item => (
-        <button className="btn btn-danger btn-sm" onClick={() => this.props.onClick(item)}>
-          Delete
-        </button>
-      )
     }
   ];
+
+  deleteColumn = {
+    column: "action",
+    label: "Action",
+    sortable: false,
+    content: item => (
+      <button className="btn btn-danger btn-sm" onClick={() => this.props.onClick(item)}>
+        Delete
+      </button>
+    )
+  };
+
+  constructor() {
+    super();
+
+    const user = getCurrentUser();
+
+    if (user && user.isAdmin) {
+      this.columns.push(this.deleteColumn);
+    }
+  }
 
   render() {
     const { sortColumn, onSort, data } = this.props;
