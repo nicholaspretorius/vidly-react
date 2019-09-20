@@ -37,8 +37,6 @@ class LoginForm extends Form {
       // this.props.history.push("/movies");
       window.location = "/movies";
     } catch (ex) {
-      console.log("Login:Error -> ", ex.response);
-
       if (ex.response && ex.response.status === 400) {
         console.log("Ex: ", ex);
         const errors = { ...this.state.errors };

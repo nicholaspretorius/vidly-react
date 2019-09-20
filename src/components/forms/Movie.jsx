@@ -79,7 +79,16 @@ class MovieForm extends Form {
       this.props.history.push("/movies");
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-        toast.error("Something went wrong.");
+        console.log("Ex: ", ex);
+        const errors = { ...this.state.errors };
+        errors.title = ex.response.data;
+        this.setState({ errors });
+      }
+      if (ex.response && ex.response.status === 401) {
+        console.log("Ex: ", ex);
+        const errors = { ...this.state.errors };
+        errors.title = ex.response.data;
+        this.setState({ errors });
       }
     }
   };

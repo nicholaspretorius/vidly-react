@@ -109,6 +109,7 @@ class Movies extends Component {
     const { movies, currentPage, pageSize, genres, currentGenre, sortColumn } = this.state;
     const sorted = _.orderBy(movies, [sortColumn.column], [sortColumn.order]);
     const allMovies = paginate(sorted, currentPage, pageSize);
+    const { user } = this.props;
     console.log("Genres component: ", genres);
 
     return (
@@ -122,9 +123,11 @@ class Movies extends Component {
             />
           </div>
           <div className="col">
-            <Link to="/movies/new" className="btn btn-primary" style={{ marginBottom: 20 }}>
-              Add movie
-            </Link>
+            {user && (
+              <Link to="/movies/new" className="btn btn-primary" style={{ marginBottom: 20 }}>
+                Add movie
+              </Link>
+            )}
             <SearchForm />
             {length === 0 && <span>There are no currently no movies.</span>}
             {<p>There are currently {length} movies in the database.</p>}
